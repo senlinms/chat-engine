@@ -271,7 +271,7 @@ module.exports = (ceConfig, pnConfig) => {
         };
 
         if (ceConfig.insecure) {
-            getChats();
+            complete();
         } else {
             pnConfig.authKey = authKey;
 
