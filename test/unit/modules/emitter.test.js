@@ -6,7 +6,7 @@ let instance = null;
 
 describe('#emitter', () => {
     it('Emitter should be instanced', (done) => {
-        instance = new Emitter(Bootstrap({ publishKey: 'demo', subscribeKey: 'demo' }));
+        instance = new Emitter(Bootstrap({ globalChannel: 'common', insecure: true }, { publishKey: 'demo', subscribeKey: 'demo' }));
         assert.isObject(instance, 'was successfully created');
         done();
     });

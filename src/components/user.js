@@ -134,6 +134,8 @@ class User extends Emitter {
      @private
      */
     assign(state, chat) {
+        //TODO: update only receive a parameter
+        //TODO: there is not a validation before doing chat = this.chatEngine.global;
         chat = this.chatEngine.global;
         this.update(state, chat);
     }
