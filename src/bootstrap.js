@@ -111,12 +111,8 @@ module.exports = (ceConfig, pnConfig) => {
             ChatEngine.me.feed.connect();
             ChatEngine.me.direct.connect();
 
-            ChatEngine.me.direct.onAny(function(a,b) {
-                console.log('direct', a)
-            })
-            ChatEngine.me.feed.onAny(function(a,b) {
-                console.log('direct', a)
-            })
+            console.log(ChatEngine.me.feed.channel);
+            console.log(ChatEngine.me.direct.channel);
 
             // these should be middleware
             ChatEngine.me.direct.on('$.server.chat.created', (payload) => {
@@ -124,9 +120,7 @@ module.exports = (ceConfig, pnConfig) => {
             });
 
             ChatEngine.me.on('$.server.chat.deleted', (payload) => {
-
                 console.log('serve deleted chat')
-
                 ChatEngine.me.serverRemoveChat(payload.chat);
 
             });

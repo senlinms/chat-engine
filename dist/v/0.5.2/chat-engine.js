@@ -466,7 +466,7 @@ class User extends Emitter {
          */
 
         // grants for these chats are done on auth. Even though they're marked private, they are locked down via the server
-        this.feed = new Chat(chatEngine, [chatEngine.global.channel, 'user', uuid, 'read.', 'feed'].join('#'), false, false, 'feed');
+        this.feed = new Chat(this.chatEngine, [this.chatEngine.ceConfig.globalChannel, 'user', uuid, 'read.', 'feed'].join('#'), false, false, 'feed');
 
         /**
          * Direct is a private channel that anybody can publish to but only
@@ -487,12 +487,12 @@ class User extends Emitter {
          * them.direct.connect();
          * them.direct.emit('private-message', {secret: 42});
          */
-        this.direct = new Chat(chatEngine, [chatEngine.global.channel, 'user', uuid, 'write.', 'direct'].join('#'), false, false, 'direct');
+        this.direct = new Chat(this.chatEngine, [this.chatEngine.ceConfig.globalChannel, 'user', uuid, 'write.', 'direct'].join('#'), false, false, 'direct');
 
         // if the user does not exist at all and we get enough
         // information to build the user
-        if (!chatEngine.users[uuid]) {
-            chatEngine.users[uuid] = this;
+        if (!this.chatEngine.users[uuid]) {
+            this.chatEngine.users[uuid] = this;
         }
 
         // update this user's state in it's created context
@@ -769,8 +769,8 @@ class Chat extends Emitter {
             chanPrivString = 'private.';
         }
 
-        if (this.channel.indexOf(chatEngine.ceConfig.globalChannel) === -1) {
-            this.channel = [chatEngine.ceConfig.globalChannel, 'chat', chanPrivString, channel].join('#');
+        if (this.channel.indexOf(this.chatEngine.ceConfig.globalChannel) === -1) {
+            this.channel = [this.chatEngine.ceConfig.globalChannel, 'chat', chanPrivString, channel].join('#');
         }
 
         /**
@@ -1371,12 +1371,6 @@ class Chat extends Emitter {
             includeUUIDs: true,
             includeState: true
         }, this.onHereNow);
-
-        // listen to all PubNub events for this Chat
-        this.chatEngine.pubnub.addListener({
-            message: this.onMessage,
-            presence: this.onPresence
-        });
 
     }
 
@@ -2521,12 +2515,8 @@ module.exports = (ceConfig, pnConfig) => {
             ChatEngine.me.feed.connect();
             ChatEngine.me.direct.connect();
 
-            ChatEngine.me.direct.onAny(function(a,b) {
-                console.log('direct', a)
-            })
-            ChatEngine.me.feed.onAny(function(a,b) {
-                console.log('direct', a)
-            })
+            console.log(ChatEngine.me.feed.channel);
+            console.log(ChatEngine.me.direct.channel);
 
             // these should be middleware
             ChatEngine.me.direct.on('$.server.chat.created', (payload) => {
@@ -2534,9 +2524,7 @@ module.exports = (ceConfig, pnConfig) => {
             });
 
             ChatEngine.me.on('$.server.chat.deleted', (payload) => {
-
                 console.log('serve deleted chat')
-
                 ChatEngine.me.serverRemoveChat(payload.chat);
 
             });
@@ -5168,8 +5156,6 @@ class Me extends User {
 
         this.authData = authData;
         this.chatEngine = chatEngine;
-
-        console.log(this.direct)
 
     }
 

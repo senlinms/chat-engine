@@ -43,8 +43,8 @@ class Chat extends Emitter {
             chanPrivString = 'private.';
         }
 
-        if (this.channel.indexOf(chatEngine.ceConfig.globalChannel) === -1) {
-            this.channel = [chatEngine.ceConfig.globalChannel, 'chat', chanPrivString, channel].join('#');
+        if (this.channel.indexOf(this.chatEngine.ceConfig.globalChannel) === -1) {
+            this.channel = [this.chatEngine.ceConfig.globalChannel, 'chat', chanPrivString, channel].join('#');
         }
 
         /**
@@ -645,12 +645,6 @@ class Chat extends Emitter {
             includeUUIDs: true,
             includeState: true
         }, this.onHereNow);
-
-        // listen to all PubNub events for this Chat
-        this.chatEngine.pubnub.addListener({
-            message: this.onMessage,
-            presence: this.onPresence
-        });
 
     }
 

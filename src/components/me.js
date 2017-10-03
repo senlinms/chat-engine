@@ -23,8 +23,6 @@ class Me extends User {
         this.authData = authData;
         this.chatEngine = chatEngine;
 
-        console.log(this.direct)
-
     }
 
     /**

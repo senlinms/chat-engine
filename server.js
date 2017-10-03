@@ -258,6 +258,8 @@ app.post('/insecure/chats', function(req, res) {
 
     let newChan = [req.body.globalChannel, 'user', req.body.uuid, 'write.', 'direct'].join('#');
 
+    console.log('publishing to', newChan)
+
     pubnub.publish({
         channel: newChan,
         message: {

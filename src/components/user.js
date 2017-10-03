@@ -77,7 +77,7 @@ class User extends Emitter {
          */
 
         // grants for these chats are done on auth. Even though they're marked private, they are locked down via the server
-        this.feed = new Chat(chatEngine, [chatEngine.global.channel, 'user', uuid, 'read.', 'feed'].join('#'), false, false, 'feed');
+        this.feed = new Chat(this.chatEngine, [this.chatEngine.ceConfig.globalChannel, 'user', uuid, 'read.', 'feed'].join('#'), false, false, 'feed');
 
         /**
          * Direct is a private channel that anybody can publish to but only
@@ -98,12 +98,12 @@ class User extends Emitter {
          * them.direct.connect();
          * them.direct.emit('private-message', {secret: 42});
          */
-        this.direct = new Chat(chatEngine, [chatEngine.global.channel, 'user', uuid, 'write.', 'direct'].join('#'), false, false, 'direct');
+        this.direct = new Chat(this.chatEngine, [this.chatEngine.ceConfig.globalChannel, 'user', uuid, 'write.', 'direct'].join('#'), false, false, 'direct');
 
         // if the user does not exist at all and we get enough
         // information to build the user
-        if (!chatEngine.users[uuid]) {
-            chatEngine.users[uuid] = this;
+        if (!this.chatEngine.users[uuid]) {
+            this.chatEngine.users[uuid] = this;
         }
 
         // update this user's state in it's created context
