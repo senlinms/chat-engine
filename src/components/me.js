@@ -69,9 +69,9 @@ class Me extends User {
         /**
         * Fired when another identical instance of {@link ChatEngine} and {@link Me} joins a {@link Chat} that this instance of {@link ChatEngine} is unaware of.
         * Used to synchronize ChatEngine sessions between desktop and mobile, duplicate windows, etc.
-        * @event Me#$"."session"."chat"."restore
+        * @event Me#$"."session"."chat"."join
         */
-        this.trigger('$.session.chat.restore', {
+        this.trigger('$.session.chat.join', {
             chat: theChat
         });
 

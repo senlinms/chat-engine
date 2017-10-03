@@ -251,25 +251,6 @@ app.get('/insecure/chats', function (req, res) {
 // new chat
 app.post('/insecure/chats', function(req, res) {
 
-    // if the client says this is public, add them to the list of public chats for this user
-
-    // logic goes here to tell if user can create this specific chat
-    console.log('new chat created on behalf of ', req.body.uuid, req.body.authKey, 'for channel', req.body.chat.channel, 'privatE?', req.body.chat.private);
-
-    let newChan = [req.body.globalChannel, 'user', req.body.uuid, 'write.', 'direct'].join('#');
-
-    console.log('publishing to', newChan)
-
-    pubnub.publish({
-        channel: newChan,
-        message: {
-            event: '$.server.chat.created',
-            chat: req.body.chat
-        }
-    }, function(a,b) {
-        // console.log(a,b)
-    });
-
     let key = ['session', req.body.uuid].join(':');
     db[key] = db[key] || [];
 
@@ -287,6 +268,25 @@ app.post('/insecure/chats', function(req, res) {
 
     if(!found) {
         db[key].push(req.body.chat);
+
+        // if the client says this is public, add them to the list of public chats for this user
+
+        // logic goes here to tell if user can create this specific chat
+        console.log('new chat created on behalf of ', req.body.uuid, req.body.authKey, 'for channel', req.body.chat.channel, 'privatE?', req.body.chat.private);
+
+        let newChan = [req.body.globalChannel, 'user', req.body.uuid, 'write.', 'direct'].join('#');
+
+        console.log('publishing to', newChan)
+
+        pubnub.publish({
+            channel: newChan,
+            message: {
+                event: '$.server.chat.created',
+                chat: req.body.chat
+            }
+        }, function(a,b) {
+            // console.log(a,b)
+        });
     }
 
     return res.sendStatus(200);

@@ -108,22 +108,19 @@ module.exports = (ceConfig, pnConfig) => {
             ChatEngine.global = new Chat(ChatEngine, ceConfig.globalChannel, false, true, 'global');
 
             ChatEngine.me.update(state);
+
             ChatEngine.me.feed.connect();
             ChatEngine.me.direct.connect();
-
-            console.log(ChatEngine.me.feed.channel);
-            console.log(ChatEngine.me.direct.channel);
 
             // these should be middleware
             ChatEngine.me.direct.on('$.server.chat.created', (payload) => {
                 ChatEngine.me.serverAddChat(payload.chat);
             });
 
-            ChatEngine.me.on('$.server.chat.deleted', (payload) => {
-                console.log('serve deleted chat')
+            ChatEngine.me.direct.on('$.server.chat.deleted', (payload) => {
                 ChatEngine.me.serverRemoveChat(payload.chat);
-
             });
+
             /**
              *  Fired when ChatEngine is connected to the internet and ready to go!
              * @event ChatEngine#$"."ready
